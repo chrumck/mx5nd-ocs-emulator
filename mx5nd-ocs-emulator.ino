@@ -23,7 +23,7 @@
 
 #define FRAME_x438_ID 0x438
 #define FRAME_x438_SEND_INTERVAL_MILLIS 1000
-u8 x438FramePayload[8] = { 0x42, 0x31, 0x37, 0x38, 0x39, 0x32, 0x54, 0x4C };
+const u8 x438FramePayload[8] = { 0x42, 0x31, 0x37, 0x38, 0x39, 0x32, 0x54, 0x4C };
 
 void setup() {
     Serial.begin(SERIAL_BAUD_RATE);
@@ -67,8 +67,8 @@ void loop() {
     cycleNumber = (cycleNumber + 1) % FRAME_x344_CYCLE_COUNT;
 }
 
-void sendFrame(u16 id, u8* payload) {
-    if (!CAN.beginPacket(id)) {
+void sendFrame(u16 frameId, const u8* payload) {
+    if (!CAN.beginPacket(frameId)) {
         Serial.println("CAN.beginPacket() failed.");
         return;
     }
