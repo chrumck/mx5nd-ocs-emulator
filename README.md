@@ -2,8 +2,8 @@
 
 ## Description
 
-This Arduino program is emulating the MX-5 ND passenger occupancy sensor. It is meant to be used when the original seat is removed together with the OEM sensor.
+This is the emulator of the MX-5 ND passenger occupancy sensor. It is meant to be used when the original OEM sensor is removed together with the seat from the car.
 
-The code allows for having a switch with which you can toggle the occupancy state, so when there is a passenger in the car, the SRS system can be notified that the airbags should deploy.
+The code has provisions for an occupancy switch which can connected to pin 9. When there is a passenger in the car, the switch can be used to let SRS system know that the passenger airbags should deploy in case of an accident.
 
-This Arduino program is a modification of [Timurrrr's "fake car"](https://github.com/timurrrr/RaceChronoDiyBleDevice#testing-with-a-fake-car) code to fake a Mazda MX-5 ND. Please see Timurrrr's instructions how to assemble and use the sender.
+The program is a modification of [Timurrrr's "fake car"](https://github.com/timurrrr/RaceChronoDiyBleDevice#testing-with-a-fake-car) which spoofs Mazda MX-5 ND CAN frames. Please see Timurrrr's instructions how to assemble and use the sender.
