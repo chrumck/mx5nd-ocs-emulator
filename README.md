@@ -1,11 +1,35 @@
 # Mazda MX-5 ND Passenger Occupancy Sensor Emulator
 
+<p align="center">
+    <img src="./media/PXL_20240120_113852492.jpg" alt="POS Emulator" style="height: 50%; width:50%;"/>
+</p>
+
 ## Description
 
-This is the emulator of the MX-5 ND passenger occupancy sensor built with Arduino. It is meant to be used when the original OEM sensor is removed together with the seat from the car.
+This is an emulator of the MX-5 ND passenger occupancy sensor built with Arduino. It can be used when the original OEM sensor is removed from the car together with the seat.
 
-The code has provisions for a switch which can be connected to one of the analog pins (Look for 'PASSENGER_PRESENT_PIN' in code to get the pin number). When there is a passenger in the car, using the switch to send 5V to the pin will to make the emulator send `Passenger Present` signal to the SRS system to let it know that the passenger airbags should deploy in case of an accident.
+The code has provisions for a switch which can be connected to one of the analog pins (Look for 'PASSENGER_PRESENT_PIN' in code to get the pin number). When there is a passenger in the car, using the switch to send 5V to the pin will to make the emulator send `Passenger Present` signal to the SRS system to let it know that the passenger airbags should deploy in case of an accident. The pin needs to be connected to ground with a pull down resistor (10kΩ or similar).
 
-The program is a modification of [Timurrrr's "fake car"](https://github.com/timurrrr/RaceChronoDiyBleDevice#testing-with-a-fake-car) which spoofs Mazda MX-5 ND CAN frames. Please see Timurrrr's instructions how to assemble the emulator.
+Additionally, the unit in the pictures uses a DPDT switch and the other pole is used to toggle the seat belt signal. When the occupancy emulator is set to send `Passenger Present` signal, the `Seat Belt On` signal is sent along with it.
 
-The emulator needs to be connected [according to this wiring diagram](https://www.mx5manual.com/page.html?p=wiring&s=WR001&docid=SM356447)
+The program is a modification of [Timurrrr's "fake car"](https://github.com/timurrrr/RaceChronoDiyBleDevice#testing-with-a-fake-car) which spoofs Mazda MX-5 ND CAN frames. Refer to Timurrrr's instructions how to assemble the emulator.
+
+The emulator needs to be connected [according to this wiring diagram](https://www.mx5manual.com/page.html?p=wiring&s=WR001&docid=SM356447) . The seat belt buckles wiring is [shown here](https://www.mx5manual.com/page.html?p=wiring&s=WR001&docid=SM356446) .
+
+## Pictures
+
+<p align="center">
+    <img src="./media/PXL_20240119_142248539.jpg" alt="POS Emulator" style="height: 50%; width:50%;"/>
+</p>
+
+<p align="center">
+    <img src="./media/PXL_20240119_180921346.jpg" alt="POS Emulator" style="height: 50%; width:50%;"/>
+</p>
+
+<p align="center">
+    <img src="./media/PXL_20240119_180938509.jpg" alt="POS Emulator" style="height: 50%; width:50%;"/>
+</p>
+
+<p align="center">
+    <img src="./media/PXL_20240120_110820375.jpg" alt="POS Emulator" style="height: 50%; width:50%;"/>
+</p>
