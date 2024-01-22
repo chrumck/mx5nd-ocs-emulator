@@ -6,8 +6,8 @@
 
 #define CS_PIN 10 // SPI pin to the CAN controller
 #define IRQ_PIN 9 // SPI pin to the CAN controller
-#define MCP2515_QUARTZ_MHZ 8  // Some MCP2515 boards have 8 MHz quartz.
-#define SPI_MHZ 8 // SPI frequency
+#define MCP2515_QUARTZ_FREQUENCY 8E6  // Some MCP2515 boards have 8 MHz quartz.
+#define SPI_FREQUENCY 8E6 // SPI frequency
 #define CAN_BAUD_RATE 500E3 // MX5 ND uses 500k baud rate hor HS CAN
 #define CAN_FRAME_LENGTH 8 // can frame payload size
 
@@ -23,16 +23,16 @@
 
 #define FRAME_x438_ID 0x438
 #define FRAME_x438_SEND_INTERVAL_MILLIS 1000
-const u8 x438FramePayload[8] = { 0x42, 0x31, 0x37, 0x38, 0x39, 0x32, 0x54, 0x4C }; // 2019 30AE
-//const u8 x438FramePayload[8] = { 0x44, 0x33, 0x36, 0x34, 0x35, 0x32, 0x51, 0x37 }; // Is it sensor's serial number?
+const u8 x438FramePayload[CAN_FRAME_LENGTH] = { 0x42, 0x31, 0x37, 0x38, 0x39, 0x32, 0x54, 0x4C }; // 2019 30AE
+//const u8 x438FramePayload[CAN_FRAME_LENGTH] = { 0x44, 0x33, 0x36, 0x34, 0x35, 0x32, 0x51, 0x37 }; // Is it sensor's serial number?
 
 void setup() {
     Serial.begin(SERIAL_BAUD_RATE);
 
     pinMode(PASSENGER_PRESENT_PIN, INPUT);
 
-    CAN.setClockFrequency(MCP2515_QUARTZ_MHZ * 1E6);
-    CAN.setSPIFrequency(SPI_MHZ * 1E6);
+    CAN.setClockFrequency(MCP2515_QUARTZ_FREQUENCY);
+    CAN.setSPIFrequency(SPI_FREQUENCY);
     CAN.setPins(CS_PIN, IRQ_PIN);
 
     while (!CAN.begin(CAN_BAUD_RATE)) {
