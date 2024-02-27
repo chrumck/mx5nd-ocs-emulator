@@ -1,4 +1,5 @@
-#include <CAN.h>
+#include <SPI.h>
+#include <mcp2515.h>
 
 #define SERIAL_BAUD_RATE 115200
 
@@ -26,21 +27,42 @@
 const u8 x438FramePayload[CAN_FRAME_LENGTH] = { 0x42, 0x31, 0x37, 0x38, 0x39, 0x32, 0x54, 0x4C }; // 2019 30AE
 //const u8 x438FramePayload[CAN_FRAME_LENGTH] = { 0x44, 0x33, 0x36, 0x34, 0x35, 0x32, 0x51, 0x37 }; // Is it sensor's serial number?
 
+MCP2515 mcp2515(CS_PIN, SPI_FREQUENCY, &SPI);
+
 void setup() {
     Serial.begin(SERIAL_BAUD_RATE);
 
     pinMode(PASSENGER_PRESENT_PIN, INPUT);
 
-    CAN.setClockFrequency(MCP2515_QUARTZ_FREQUENCY);
-    CAN.setSPIFrequency(SPI_FREQUENCY);
-    CAN.setPins(CS_PIN, IRQ_PIN);
+    SPI.begin();
 
-    while (!CAN.begin(CAN_BAUD_RATE)) {
-        Serial.println("Failed to connect to the CAN controller!");
-        delay(1000);
-    }
+    MCP2515::ERROR error = MCP2515::ERROR_OK;
+    do
+    {
+        if (error != MCP2515::ERROR_OK) { delay(1000); }
 
-    Serial.println("CAN controller connected");
+        error = mcp2515.reset();
+        if (error != MCP2515::ERROR_OK) {
+            Serial.print("MCP2515 reset failed with error:");
+            Serial.println(error);
+            continue;
+        }
+
+        error = mcp2515.setBitrate(CAN_500KBPS, MCP_8MHZ);
+        if (error != MCP2515::ERROR_OK) {
+            Serial.print("MCP2515 setBitrate failed with error:");
+            Serial.println(error);
+            continue;
+        }
+
+        error = mcp2515.setNormalMode();
+        if (error != MCP2515::ERROR_OK) {
+            Serial.print("MCP2515 setNormalMode failed with error:");
+            Serial.println(error);
+        }
+    } while (error != MCP2515::ERROR_OK);
+
+    Serial.print("MCP2515 setup successful.");
 }
 
 void loop() {
@@ -61,26 +83,19 @@ void loop() {
         FRAME_x344_BYTE0_PASSENGER_PRESENT :
         FRAME_x344_BYTE0_NO_PASSENGER;
 
-    u8 frameX344Payload[CAN_FRAME_LENGTH] = { byte0, 0, 0, 0, 0, 0, 0, 0 };
-    buildFrameX344(cycleNumber, frameX344Payload);
-    sendFrame(FRAME_x344_ID, frameX344Payload);
+    u8 x344FramePayload[CAN_FRAME_LENGTH] = { byte0, 0, 0, 0, 0, 0, 0, 0 };
+    buildFrameX344(cycleNumber, x344FramePayload);
+    sendFrame(FRAME_x344_ID, x344FramePayload);
 
     cycleNumber = (cycleNumber + 1) % FRAME_x344_CYCLE_COUNT;
 }
 
 void sendFrame(u16 frameId, const u8* payload) {
-    if (!CAN.beginPacket(frameId)) {
-        Serial.println("CAN.beginPacket() failed.");
-        return;
-    }
+    can_frame frameToSend = { .can_id = frameId, .can_dlc = CAN_FRAME_LENGTH, };
+    memcpy(frameToSend.data, payload, CAN_FRAME_LENGTH);
 
-    if (CAN.write(payload, CAN_FRAME_LENGTH) != CAN_FRAME_LENGTH) {
-        Serial.println("CAN.write() failed.");
-    }
-
-    if (!CAN.endPacket()) {
-        Serial.println("CAN.endPacket() failed.");
-        return;
+    if (mcp2515.sendMessage(&frameToSend) != MCP2515::ERROR_OK) {
+        Serial.println("mcp2515.sendMessage() failed.");
     }
 
     return;
