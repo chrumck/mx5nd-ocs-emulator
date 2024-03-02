@@ -7,7 +7,7 @@
 
 #define CS_PIN 10 // SPI pin to the CAN controller
 #define SPI_FREQUENCY 8E6
-#define QUARTZ_FREQUENCY MCP_16MHZ
+#define QUARTZ_FREQUENCY MCP_8MHZ
 #define CAN_BAUD_RATE CAN_500KBPS // MX5 ND uses 500k baud rate hor HS CAN
 
 #define EMULATOR_STARTUP_TIME_MILLIS 2700 // initial time the OCS sensor sends 0 as occupancy data.

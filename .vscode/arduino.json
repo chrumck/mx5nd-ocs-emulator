@@ -2,5 +2,5 @@
   "sketch": "mx5nd-ocs-emulator.ino",
   "configuration": "cpu=16MHzatmega32U4",
   "board": "SparkFun:avr:promicro",
-  "port": "COM14"
+  "port": "COM11"
 }
