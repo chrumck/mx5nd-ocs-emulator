@@ -6,13 +6,13 @@
 #define PASSENGER_PRESENT_PIN 9 // a switch to select passenger/no passenger can be connected to this pin 
 
 #define CS_PIN 10 // SPI pin to the CAN controller
-#define IRQ_PIN 9 // SPI pin to the CAN controller
-#define MCP2515_QUARTZ_FREQUENCY 8E6  // Some MCP2515 boards have 8 MHz quartz.
-#define SPI_FREQUENCY 8E6 // SPI frequency
-#define CAN_BAUD_RATE 500E3 // MX5 ND uses 500k baud rate hor HS CAN
-#define CAN_FRAME_LENGTH 8 // can frame payload size
+#define SPI_FREQUENCY 8E6
+#define QUARTZ_FREQUENCY MCP_16MHZ
+#define CAN_BAUD_RATE CAN_500KBPS // MX5 ND uses 500k baud rate hor HS CAN
 
 #define EMULATOR_STARTUP_TIME_MILLIS 2700 // initial time the OCS sensor sends 0 as occupancy data.
+
+#define CAN_FRAME_LENGTH 8
 
 #define FRAME_x344_ID 0x344
 #define FRAME_x344_SEND_INTERVAL_MILLIS 100
@@ -48,7 +48,7 @@ void setup() {
             continue;
         }
 
-        error = mcp2515.setBitrate(CAN_500KBPS, MCP_8MHZ);
+        error = mcp2515.setBitrate(CAN_BAUD_RATE, QUARTZ_FREQUENCY);
         if (error != MCP2515::ERROR_OK) {
             Serial.print("MCP2515 setBitrate failed with error:");
             Serial.println(error);
