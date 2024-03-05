@@ -31,6 +31,8 @@
 u8 x438FramePayload[CAN_FRAME_LENGTH] = { 0x42, 0x31, 0x37, 0x38, 0x39, 0x32, 0x54, 0x4C }; // 2019 30AE
 //const u8 x438FramePayload[CAN_FRAME_LENGTH] = { 0x44, 0x33, 0x36, 0x34, 0x35, 0x32, 0x51, 0x37 }; // Is it sensor's serial number?
 
+int lastPassengerPresent = 0;
+
 MCP_CAN mcp2515(CS_PIN);
 
 void setup() {
@@ -68,6 +70,12 @@ void loop() {
     }
 
     int passengerPresent = digitalRead(PASSENGER_PRESENT_PIN);
+
+    if (passengerPresent != lastPassengerPresent) {
+        lastPassengerPresent = passengerPresent;
+        LED_TOGGLE();
+    }
+
     u8 byte0 = currentTime < EMULATOR_STARTUP_TIME_MILLIS ?
         FRAME_x344_BYTE0_STARTUP : passengerPresent ?
         FRAME_x344_BYTE0_PASSENGER_PRESENT :
