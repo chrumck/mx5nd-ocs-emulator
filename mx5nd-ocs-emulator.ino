@@ -1,14 +1,17 @@
 #include <SPI.h>
-#include <mcp2515.h>
+#include <mcp_canbus.h>
 
 #define SERIAL_BAUD_RATE 115200
 
-#define PASSENGER_PRESENT_PIN 9 // a switch to select passenger/no passenger can be connected to this pin 
+#define PASSENGER_PRESENT_PIN 4 // a switch to select passenger/no passenger can be connected to this pin 
 
-#define CS_PIN 10 // SPI pin to the CAN controller
-#define SPI_FREQUENCY 8E6
-#define QUARTZ_FREQUENCY MCP_8MHZ
+#define CS_PIN 9 // SPI pin to the CAN controller
 #define CAN_BAUD_RATE CAN_500KBPS // MX5 ND uses 500k baud rate hor HS CAN
+
+#define LED_PIN 3
+#define LED_ON()     digitalWrite(LED_PIN, HIGH)
+#define LED_OFF()    digitalWrite(LED_PIN, LOW)
+#define LED_TOGGLE() digitalWrite(LED_PIN, 1 - digitalRead(LED_PIN))
 
 #define EMULATOR_STARTUP_TIME_MILLIS 2700 // initial time the OCS sensor sends 0 as occupancy data.
 
@@ -24,44 +27,31 @@
 
 #define FRAME_x438_ID 0x438
 #define FRAME_x438_SEND_INTERVAL_MILLIS 1000
-const u8 x438FramePayload[CAN_FRAME_LENGTH] = { 0x42, 0x31, 0x37, 0x38, 0x39, 0x32, 0x54, 0x4C }; // 2019 30AE
+
+u8 x438FramePayload[CAN_FRAME_LENGTH] = { 0x42, 0x31, 0x37, 0x38, 0x39, 0x32, 0x54, 0x4C }; // 2019 30AE
 //const u8 x438FramePayload[CAN_FRAME_LENGTH] = { 0x44, 0x33, 0x36, 0x34, 0x35, 0x32, 0x51, 0x37 }; // Is it sensor's serial number?
 
-MCP2515 mcp2515(CS_PIN, SPI_FREQUENCY, &SPI);
+MCP_CAN mcp2515(CS_PIN);
 
 void setup() {
     Serial.begin(SERIAL_BAUD_RATE);
 
+    pinMode(LED_PIN, OUTPUT);
     pinMode(PASSENGER_PRESENT_PIN, INPUT);
 
-    SPI.begin();
-
-    MCP2515::ERROR error = MCP2515::ERROR_OK;
-    do
+    for (int i = 0; i < 20; i++)
     {
-        if (error != MCP2515::ERROR_OK) { delay(1000); }
+        LED_TOGGLE();
+        delay(20);
+    }
 
-        error = mcp2515.reset();
-        if (error != MCP2515::ERROR_OK) {
-            Serial.print("MCP2515 reset failed with error:");
-            Serial.println(error);
-            continue;
-        }
+    while (mcp2515.begin(CAN_BAUD_RATE) != CAN_OK)
+    {
+        delay(1000);
+        LED_TOGGLE();
+    }
 
-        error = mcp2515.setBitrate(CAN_BAUD_RATE, QUARTZ_FREQUENCY);
-        if (error != MCP2515::ERROR_OK) {
-            Serial.print("MCP2515 setBitrate failed with error:");
-            Serial.println(error);
-            continue;
-        }
-
-        error = mcp2515.setNormalMode();
-        if (error != MCP2515::ERROR_OK) {
-            Serial.print("MCP2515 setNormalMode failed with error:");
-            Serial.println(error);
-        }
-    } while (error != MCP2515::ERROR_OK);
-
+    LED_ON();
     Serial.print("MCP2515 setup successful.");
 }
 
@@ -90,15 +80,8 @@ void loop() {
     cycleNumber = (cycleNumber + 1) % FRAME_x344_CYCLE_COUNT;
 }
 
-void sendFrame(u16 frameId, const u8* payload) {
-    can_frame frameToSend = { .can_id = frameId, .can_dlc = CAN_FRAME_LENGTH, };
-    memcpy(frameToSend.data, payload, CAN_FRAME_LENGTH);
-
-    if (mcp2515.sendMessage(&frameToSend) != MCP2515::ERROR_OK) {
-        Serial.println("mcp2515.sendMessage() failed.");
-    }
-
-    return;
+void sendFrame(u16 frameId, u8* payload) {
+    mcp2515.sendMsgBuf(frameId, 0, CAN_FRAME_LENGTH, payload);
 }
 
 u8* buildFrameX344(u8 cycleNumber, u8* payload) {
