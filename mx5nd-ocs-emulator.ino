@@ -54,7 +54,7 @@ void setup() {
     }
 
     LED_ON();
-    Serial.print("MCP2515 setup successful.");
+    Serial.println("MCP2515 setup successful.");
 }
 
 void loop() {
@@ -71,11 +71,6 @@ void loop() {
 
     int passengerPresent = digitalRead(PASSENGER_PRESENT_PIN);
 
-    if (passengerPresent != lastPassengerPresent) {
-        lastPassengerPresent = passengerPresent;
-        LED_TOGGLE();
-    }
-
     u8 byte0 = currentTime < EMULATOR_STARTUP_TIME_MILLIS ?
         FRAME_x344_BYTE0_STARTUP : passengerPresent ?
         FRAME_x344_BYTE0_PASSENGER_PRESENT :
@@ -86,6 +81,12 @@ void loop() {
     sendFrame(FRAME_x344_ID, x344FramePayload);
 
     cycleNumber = (cycleNumber + 1) % FRAME_x344_CYCLE_COUNT;
+
+    if (passengerPresent != lastPassengerPresent) {
+        lastPassengerPresent = passengerPresent;
+        Serial.print("Passenger present switched to:");
+        Serial.println(passengerPresent);
+    }
 }
 
 void sendFrame(u16 frameId, u8* payload) {
