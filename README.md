@@ -16,6 +16,10 @@ The program is a modification of [Timurrrr's "fake car"](https://github.com/timu
 
 The emulator needs to be connected [according to this wiring diagram](https://www.mx5manual.com/page.html?p=wiring&s=WR001&docid=SM356447) . The seat belt buckles wiring is [shown here](https://www.mx5manual.com/page.html?p=wiring&s=WR001&docid=SM356446) .
 
+It important that the emulator does not introduce any noise in the car's CAN bus network. The circuit includes a DC-DC 5V inverter and a capacitor to deliver stable power supply. Additionally, it is important that the CAN bus wires are properly twisted and made not too long to avoid interference.
+
+This emulator has been tested and confirmed to be working, but if you run into noise and interference issues which can, among other things, manifest themselves as U0001 errors, you can try to build the module using alternative components. An example of a build based on [Longan Labs Module](https://docs.longan-labs.cc/1030017/) can be found [here](https://github.com/chrumck/mx5nd-ocs-emulator/tree/longan_i2c_can)
+
 ## Pictures
 
 <p align="center">
