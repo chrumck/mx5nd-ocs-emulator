@@ -12,7 +12,7 @@ The code has provisions for a switch which can be connected to one of the analog
 
 Additionally, the unit in the pictures uses a DPDT switch and the other pole is used to toggle the seat belt signal. When the occupancy emulator is set to send `Passenger Present` signal, the `Seat Belt On` signal is sent along with it.
 
-The program is a modification of [Timurrrr's "fake car"](https://github.com/timurrrr/RaceChronoDiyBleDevice#testing-with-a-fake-car) which spoofs Mazda MX-5 ND CAN frames. Refer to Timurrrr's instructions how to assemble the emulator.
+The program is a modification of [Timurrrr's "fake car"](https://github.com/timurrrr/RaceChronoDiyBleDevice#testing-with-a-fake-car) which spoofs Mazda MX-5 ND CAN frames. The emulator is built with an alternative module [from Longan Labs](https://docs.longan-labs.cc/1030017/). It is possible to build the emulator with other components, with only slight modifications to the code.
 
 The emulator needs to be connected [according to this wiring diagram](https://www.mx5manual.com/page.html?p=wiring&s=WR001&docid=SM356447) . The seat belt buckles wiring is [shown here](https://www.mx5manual.com/page.html?p=wiring&s=WR001&docid=SM356446) .
 
