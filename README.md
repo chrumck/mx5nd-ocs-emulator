@@ -16,20 +16,22 @@ The program is a modification of [Timurrrr's "fake car"](https://github.com/timu
 
 The emulator needs to be connected [according to this wiring diagram](https://www.mx5manual.com/page.html?p=wiring&s=WR001&docid=SM356447) . The seat belt buckles wiring is [shown here](https://www.mx5manual.com/page.html?p=wiring&s=WR001&docid=SM356446) .
 
+It important that the emulator does not introduce any noise in the car's CAN bus network. The circuit includes a DC-DC 5V inverter and a capacitor to deliver stable power supply. Additionally, it is important that the CAN bus wires are properly twisted and made not too long to avoid interference.
+
 ## Pictures
 
 <p align="center">
-    <img src="./media/PXL_20240119_142248539.jpg" alt="POS Emulator" style="height: 50%; width:50%;"/>
-</p>
-
-<p align="center">
-    <img src="./media/PXL_20240119_180921346.jpg" alt="POS Emulator" style="height: 50%; width:50%;"/>
-</p>
-
-<p align="center">
-    <img src="./media/PXL_20240119_180938509.jpg" alt="POS Emulator" style="height: 50%; width:50%;"/>
-</p>
-
-<p align="center">
     <img src="./media/PXL_20240120_110820375.jpg" alt="POS Emulator" style="height: 50%; width:50%;"/>
+</p>
+
+<p align="center">
+    <img src="./media/ocs-emulator-longan-01.jpg" alt="POS Emulator" style="height: 50%; width:50%;"/>
+</p>
+
+<p align="center">
+    <img src="./media/ocs-emulator-longan-02.jpg" alt="POS Emulator" style="height: 50%; width:50%;"/>
+</p>
+
+<p align="center">
+    <img src="./media/ocs-emulator-longan-03.jpg" alt="POS Emulator" style="height: 50%; width:50%;"/>
 </p>
