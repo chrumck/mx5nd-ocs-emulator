@@ -14,6 +14,8 @@ Additionally, the unit in the pictures uses a DPDT switch and the other pole is 
 
 The program is a modification of [Timurrrr's "fake car"](https://github.com/timurrrr/RaceChronoDiyBleDevice#testing-with-a-fake-car) which spoofs Mazda MX-5 ND CAN frames. The emulator is built with an alternative module [from Longan Labs](https://docs.longan-labs.cc/1030017/). A version of the emulator built on exactly the same components as Timurrr's is shown [here](https://github.com/chrumck/mx5nd-ocs-emulator/tree/main).
 
+The program uses a modified version of [Arduino_CAN_BUS_MCP2515](https://github.com/chrumck/Arduino_CAN_BUS_MCP2515) library, but should also work with Longan's official, unmodified version.
+
 The emulator needs to be connected [according to this wiring diagram](https://www.mx5manual.com/page.html?p=wiring&s=WR001&docid=SM356447) . The seat belt buckles wiring is [shown here](https://www.mx5manual.com/page.html?p=wiring&s=WR001&docid=SM356446) .
 
 It important that the emulator does not introduce any noise in the car's CAN bus network. The circuit includes a DC-DC 5V inverter and a capacitor to deliver stable power supply. Additionally, it is important that the CAN bus wires are properly twisted and made not too long to avoid interference.
